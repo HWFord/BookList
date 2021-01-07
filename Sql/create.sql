@@ -27,7 +27,7 @@ CREATE TABLE Languages(
 DROP TABLE IF EXISTS Nationalites;
 CREATE TABLE Nationalites(
    Id_Nationality INT NOT NULL AUTO_INCREMENT,
-   Nationality VARCHAR(50),
+   Nationality VARCHAR(50) NOT NULL,
    Birth_country VARCHAR(50),
    PRIMARY KEY(Id_Nationality)
 );
@@ -63,7 +63,7 @@ CREATE TABLE Gender(
 DROP TABLE IF EXISTS Author_Details;
 CREATE TABLE Author_Details(
    Id_Author INT NOT NULL AUTO_INCREMENT,
-   Name VARCHAR(50),
+   Name VARCHAR(50) NOT NULL,
    BooksWritten INT,
    Id_Nationality INT NOT NULL,
    PRIMARY KEY(Id_Author),
@@ -83,7 +83,7 @@ CREATE TABLE Purchase(
 DROP TABLE IF EXISTS Address;
 CREATE TABLE Address(
    Id_address INT NOT NULL AUTO_INCREMENT,
-   street_name VARCHAR(50),
+   street_name VARCHAR(50) NOT NULL,
    Id_postalcode INT NOT NULL,
    Id_city INT NOT NULL,
    PRIMARY KEY(Id_address),
@@ -94,9 +94,9 @@ CREATE TABLE Address(
 DROP TABLE IF EXISTS Book_Details;
 CREATE TABLE Book_Details(
    Id_Book INT NOT NULL AUTO_INCREMENT,
-   Title VARCHAR(50),
-   ISBN INT,
-   DatePublished DATE,
+   Title VARCHAR(100) NOT NULL,
+   ISBN INT NOT NULL,
+   DatePublished DATE NOT NULL,
    Favorite_Book BOOLEAN DEFAULT false,
    Id_Binding INT NOT NULL,
    Id_Author INT NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE Lost(
 DROP TABLE IF EXISTS Reader;
 CREATE TABLE Reader(
    Id_Reader INT NOT NULL AUTO_INCREMENT,
-   First_Name VARCHAR(50),
+   First_Name VARCHAR(50) NOT NULL,
    Last_name VARCHAR(50),
    Birthday DATE,
    Id_gender INT NOT NULL,
