@@ -3,14 +3,14 @@ USE book_list;
 INSERT INTO binding_details (Type) VALUES("hard_cover");
 INSERT INTO binding_details (Type) VALUES("Soft_cover");
 
-INSERT INTO category_details (Name) VALUES("Romance");
-INSERT INTO category_details (Name) VALUES("Horror");
-INSERT INTO category_details (Name) VALUES("Sci-Fi");
-INSERT INTO category_details (Name) VALUES("History");
-INSERT INTO category_details (Name) VALUES("Biography");
-INSERT INTO category_details (Name) VALUES("Auto-biography");
-INSERT INTO category_details (Name) VALUES("Young adults");
-INSERT INTO category_details (Name) VALUES("Children");
+INSERT INTO Genre VALUES (NULL, "Romance");
+INSERT INTO Genre VALUES (NULL, "Horror");
+INSERT INTO Genre VALUES (NULL, "Sci-Fi");
+INSERT INTO Genre VALUES (NULL, "History");
+INSERT INTO Genre VALUES (NULL, "Biography");
+INSERT INTO Genre VALUES (NULL, "Auto-biography");
+INSERT INTO Genre VALUES (NULL, "Young adults");
+INSERT INTO Genre VALUES (NULL, "Children");
 
 INSERT INTO languages (Writtenlanguage) VALUES("English");
 INSERT INTO languages (Writtenlanguage) VALUES("French");
@@ -33,13 +33,30 @@ INSERT INTO nationalites (Nationality) VALUES("Mexicain");
 INSERT INTO nationalites (Nationality) VALUES("Chinese");
 INSERT INTO nationalites (Nationality) VALUES("Belgian");
 
-INSERT INTO author_details (Name, BooksWritten, Id_1) VALUES ("JK Rowling",36,1);
+INSERT INTO author_details VALUES (NULL, "JK Rowling", 36, 1);
 
-INSERT INTO book_details (Date_Published, Title, ISBN10, Id_1, Id_2) VALUES (1997-06-28, "Harry Potter and the philosopher's stone",9781408855652,2,1);
-INSERT INTO book_details (Date_Published, Title, ISBN10, Id_1, Id_2) VALUES (1998-07-02, "Harry Potter and the chamber of secrets",1408855666,2,1);
-INSERT INTO book_details (Date_Published, Title, ISBN10, Id_1, Id_2) VALUES (2020-11-10, "The Ickabog",2075150559,1,1);
+INSERT INTO Binding_Details VALUES (NULL, "Hard cover");
 
+INSERT INTO book_details VALUES (NULL, "Harry Potter and the philosopher's stone", 9781408855652, 1997-06-28, true, 1, 1);
+INSERT INTO book_details VALUES (NULL, "Harry Potter and the chamber of secrets", 1408855666, 1998-07-02, true, 1, 1);
+INSERT INTO book_details VALUES (NULL, "The Ickabog",2075150559, 2020-11-10, false, 2, 1);
 
-INSERT INTO Wishlist (Id_1) VALUES (3);
-INSERT INTO owned (Id_1) VALUES (1);
-INSERT INTO owned (Id_1) VALUES (2);
+INSERT INTO WishList VALUES (NULL, 3);
+INSERT INTO Owned VALUES (NULL, 1);
+INSERT INTO Owned VALUES (NULL, 2);
+
+INSERT INTO Gender VALUES (NULL,"Female");
+INSERT INTO Gender VALUES (NULL,"Male");
+INSERT INTO Gender VALUES (NULL,"Not specified");
+
+INSERT INTO CITY VALUES(NULL, "Brentwood");
+INSERT INTO Postal_Code VALUES (NULL, "CM15 OHN");
+
+INSERT INTO Address VALUES (NULL, "Blackmore Road", 1, 1);
+
+INSERT INTO Reader VALUES (NULL, "Hannah", "Ford", 18-06-1997, 1, 1, 1);
+
+INSERT INTO isInCategory VALUES(1, 7);
+INSERT INTO isInCategory VALUES(2, 7);
+INSERT INTO isInCategory VALUES(3, 8);
+
