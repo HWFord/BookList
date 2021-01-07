@@ -54,7 +54,7 @@ INSERT INTO Postal_Code VALUES (NULL, "CM15 OHN");
 
 INSERT INTO Address VALUES (NULL, "Blackmore Road", 1, 1);
 
-INSERT INTO Reader VALUES (NULL, "Hannah", "Ford", 18-06-1997, 1, 1, 1);
+INSERT INTO Reader VALUES (NULL, "Lily", "Pickle", 1997-06-18, 1, 1, 1);
 
 INSERT INTO isInCategory VALUES(1, 7);
 INSERT INTO isInCategory VALUES(2, 7);
