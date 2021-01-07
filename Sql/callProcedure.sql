@@ -1,0 +1,1 @@
+CALL count_books_per_categorie();
