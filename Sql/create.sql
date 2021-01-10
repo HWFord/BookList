@@ -27,7 +27,7 @@ CREATE TABLE Languages(
 DROP TABLE IF EXISTS Nationalites;
 CREATE TABLE Nationalites(
    Id_Nationality INT NOT NULL AUTO_INCREMENT,
-   Nationality VARCHAR(50) NOT NULL,
+   Nationality VARCHAR(50),
    Birth_country VARCHAR(50),
    PRIMARY KEY(Id_Nationality)
 );
@@ -46,13 +46,6 @@ CREATE TABLE Postal_code(
    PRIMARY KEY(Id_postalcode)
 );
 
-DROP TABLE IF EXISTS Currency;
-CREATE TABLE Currency(
-   Id_currency INT NOT NULL AUTO_INCREMENT,
-   Currency_name VARCHAR(50),
-   PRIMARY KEY(Id_currency)
-);
-
 DROP TABLE IF EXISTS Gender;
 CREATE TABLE Gender(
    Id_gender INT NOT NULL AUTO_INCREMENT,
@@ -60,30 +53,44 @@ CREATE TABLE Gender(
    PRIMARY KEY(Id_gender)
 );
 
-DROP TABLE IF EXISTS Author_Details;
-CREATE TABLE Author_Details(
-   Id_Author INT NOT NULL AUTO_INCREMENT,
-   Name VARCHAR(50) NOT NULL,
-   BooksWritten INT,
+DROP TABLE IF EXISTS People;
+CREATE TABLE People(
+   Id_people INT NOT NULL AUTO_INCREMENT,
+   person_firstname VARCHAR(50),
+   person_lastname VARCHAR(50),
+   birthday DATE,
    Id_Nationality INT NOT NULL,
-   PRIMARY KEY(Id_Author),
-   FOREIGN KEY(Id_Nationality) REFERENCES Nationalites(Id_Nationality)
+   Id_gender INT NOT NULL,
+   PRIMARY KEY(Id_people),
+   FOREIGN KEY(Id_Nationality) REFERENCES Nationalites(Id_Nationality),
+   FOREIGN KEY(Id_gender) REFERENCES Gender(Id_gender)
 );
 
-DROP TABLE IF EXISTS Purchase;
-CREATE TABLE Purchase(
-   Id_purchase INT NOT NULL AUTO_INCREMENT,
-   purchase_date DATE,
-   Price DECIMAL(15,2),
-   Id_currency INT NOT NULL,
-   PRIMARY KEY(Id_purchase),
-   FOREIGN KEY(Id_currency) REFERENCES Currency(Id_currency)
+DROP TABLE IF EXISTS Author;
+CREATE TABLE Author(
+   Id_author INT NOT NULL AUTO_INCREMENT,
+   Name VARCHAR(50),
+   BooksWritten INT,
+   Id_people INT NOT NULL,
+   PRIMARY KEY(Id_Author),
+   UNIQUE(Id_people),
+   FOREIGN KEY(Id_people) REFERENCES People(Id_people)
 );
+
+DROP TABLE IF EXISTS Reader;
+CREATE TABLE Reader(
+   Id_Reader INT NOT NULL AUTO_INCREMENT,
+   Id_people INT NOT NULL,
+   PRIMARY KEY(Id_Reader),
+   UNIQUE(Id_people),
+   FOREIGN KEY(Id_people) REFERENCES People(Id_people)
+);
+
 
 DROP TABLE IF EXISTS Address;
 CREATE TABLE Address(
    Id_address INT NOT NULL AUTO_INCREMENT,
-   street_name VARCHAR(50) NOT NULL,
+   street_name VARCHAR(50),
    Id_postalcode INT NOT NULL,
    Id_city INT NOT NULL,
    PRIMARY KEY(Id_address),
@@ -91,62 +98,20 @@ CREATE TABLE Address(
    FOREIGN KEY(Id_city) REFERENCES City(Id_city)
 );
 
+
 DROP TABLE IF EXISTS Book_Details;
 CREATE TABLE Book_Details(
    Id_Book INT NOT NULL AUTO_INCREMENT,
-   Title VARCHAR(100) NOT NULL,
-   ISBN INT NOT NULL,
-   DatePublished DATE NOT NULL,
-   Favorite_Book BOOLEAN DEFAULT false,
+   Title VARCHAR(100),
+   ISBN INT UNIQUE,
+   DatePublished DATE,
    Id_Binding INT NOT NULL,
    Id_Author INT NOT NULL,
    PRIMARY KEY(Id_Book),
-   UNIQUE(ISBN),
    FOREIGN KEY(Id_Binding) REFERENCES Binding_Details(Id_Binding),
-   FOREIGN KEY(Id_Author) REFERENCES Author_Details(Id_Author)
+   FOREIGN KEY(Id_Author) REFERENCES Author(Id_Author)
 );
 
-DROP TABLE IF EXISTS WishList;
-CREATE TABLE WishList(
-   Id_Wishlist INT NOT NULL AUTO_INCREMENT,
-   Id_Book INT NOT NULL,
-   PRIMARY KEY(Id_Wishlist),
-   UNIQUE(Id_Book),
-   FOREIGN KEY(Id_Book) REFERENCES Book_Details(Id_Book)
-);
-
-DROP TABLE IF EXISTS Owned;
-CREATE TABLE Owned(
-   Id_owned INT NOT NULL AUTO_INCREMENT,
-   Id_Book INT NOT NULL,
-   PRIMARY KEY(Id_owned),
-   UNIQUE(Id_Book),
-   FOREIGN KEY(Id_Book) REFERENCES Book_Details(Id_Book)
-);
-
-DROP TABLE IF EXISTS Lost;
-CREATE TABLE Lost(
-   Id_lost INT NOT NULL AUTO_INCREMENT,
-   Id_owned INT NOT NULL,
-   PRIMARY KEY(Id_lost),
-   UNIQUE(Id_owned),
-   FOREIGN KEY(Id_owned) REFERENCES Owned(Id_owned)
-);
-
-DROP TABLE IF EXISTS Reader;
-CREATE TABLE Reader(
-   Id_Reader INT NOT NULL AUTO_INCREMENT,
-   First_Name VARCHAR(50) NOT NULL,
-   Last_name VARCHAR(50),
-   Birthday DATE,
-   Id_gender INT NOT NULL,
-   Id_Nationality INT NOT NULL,
-   Id_address INT NOT NULL,
-   PRIMARY KEY(Id_Reader),
-   FOREIGN KEY(Id_gender) REFERENCES Gender(Id_gender),
-   FOREIGN KEY(Id_Nationality) REFERENCES Nationalites(Id_Nationality),
-   FOREIGN KEY(Id_address) REFERENCES Address(Id_address)
-);
 
 DROP TABLE IF EXISTS Shop;
 CREATE TABLE Shop(
@@ -155,15 +120,6 @@ CREATE TABLE Shop(
    Id_address INT NOT NULL,
    PRIMARY KEY(Id_shop),
    FOREIGN KEY(Id_address) REFERENCES Address(Id_address)
-);
-
-DROP TABLE IF EXISTS In_Book_Shelf;
-CREATE TABLE In_Book_Shelf(
-   Id_inbookshelf INT NOT NULL AUTO_INCREMENT,
-   Id_owned INT NOT NULL,
-   PRIMARY KEY(Id_inbookshelf),
-   UNIQUE(Id_owned),
-   FOREIGN KEY(Id_owned) REFERENCES Owned(Id_owned)
 );
 
 DROP TABLE IF EXISTS isInCategory;
@@ -193,31 +149,22 @@ CREATE TABLE owns(
    FOREIGN KEY(Id_Reader) REFERENCES Reader(Id_Reader)
 );
 
-DROP TABLE IF EXISTS purchasedFromShop;
-CREATE TABLE purchasedFromShop(
-   Id_purchase INT,
-   Id_shop INT,
-   PRIMARY KEY(Id_purchase, Id_shop),
-   FOREIGN KEY(Id_purchase) REFERENCES Purchase(Id_purchase),
-   FOREIGN KEY(Id_shop) REFERENCES Shop(Id_shop)
+DROP TABLE IF EXISTS hasPostalCode;
+CREATE TABLE hasPostalCode(
+   Id_city INT,
+   Id_postalcode INT,
+   PRIMARY KEY(Id_city, Id_postalcode),
+   FOREIGN KEY(Id_city) REFERENCES City(Id_city),
+   FOREIGN KEY(Id_postalcode) REFERENCES Postal_code(Id_postalcode)
 );
 
-DROP TABLE IF EXISTS shopPurchased;
-CREATE TABLE shopPurchased(
-   Id_purchase INT,
-   Id_shop INT,
-   PRIMARY KEY(Id_purchase, Id_shop),
-   FOREIGN KEY(Id_purchase) REFERENCES Purchase(Id_purchase),
-   FOREIGN KEY(Id_shop) REFERENCES Shop(Id_shop)
-);
-
-DROP TABLE IF EXISTS readerPurchased;
-CREATE TABLE readerPurchased(
-   Id_owned INT,
-   Id_purchase INT,
-   PRIMARY KEY(Id_owned, Id_purchase),
-   FOREIGN KEY(Id_owned) REFERENCES Owned(Id_owned),
-   FOREIGN KEY(Id_purchase) REFERENCES Purchase(Id_purchase)
+DROP TABLE IF EXISTS livesAt;
+CREATE TABLE livesAt(
+   Id_address INT,
+   Id_people INT,
+   PRIMARY KEY(Id_address, Id_people),
+   FOREIGN KEY(Id_address) REFERENCES Address(Id_address),
+   FOREIGN KEY(Id_people) REFERENCES People(Id_people)
 );
 
 DROP TABLE IF EXISTS hasFavoriteGenre;
@@ -227,4 +174,35 @@ CREATE TABLE hasFavoriteGenre(
    PRIMARY KEY(Id_Genre, Id_Reader),
    FOREIGN KEY(Id_Genre) REFERENCES Genre(Id_Genre),
    FOREIGN KEY(Id_Reader) REFERENCES Reader(Id_Reader)
+);
+
+DROP TABLE IF EXISTS wants;
+CREATE TABLE wants(
+   Id_Book INT,
+   Id_Reader INT,
+   PRIMARY KEY(Id_Book, Id_Reader),
+   FOREIGN KEY(Id_Book) REFERENCES Book_Details(Id_Book),
+   FOREIGN KEY(Id_Reader) REFERENCES Reader(Id_Reader)
+);
+
+DROP TABLE IF EXISTS buys;
+CREATE TABLE buys(
+   Id_Book INT,
+   Id_Reader INT,
+   Id_shop INT,
+   price DECIMAL(15,2),
+   currency VARCHAR(50),
+   PRIMARY KEY(Id_Book, Id_Reader, Id_shop),
+   FOREIGN KEY(Id_Book) REFERENCES Book_Details(Id_Book),
+   FOREIGN KEY(Id_Reader) REFERENCES Reader(Id_Reader),
+   FOREIGN KEY(Id_shop) REFERENCES Shop(Id_shop)
+);
+
+DROP TABLE IF EXISTS boughtBy;
+CREATE TABLE boughtBy(
+   Id_Book INT,
+   Id_shop INT,
+   PRIMARY KEY(Id_Book, Id_shop),
+   FOREIGN KEY(Id_Book) REFERENCES Book_Details(Id_Book),
+   FOREIGN KEY(Id_shop) REFERENCES Shop(Id_shop)
 );
