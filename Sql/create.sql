@@ -3,7 +3,7 @@ CREATE DATABASE book_list;
 
 USE book_list;
 
-DROP TABLE IF EXISTS Binding_Details;
+DROP TABLE IF EXISTS Binding_details;
 CREATE TABLE Binding_Details(
    Id_Binding INT NOT NULL AUTO_INCREMENT,
    Type VARCHAR(50),
@@ -32,7 +32,6 @@ CREATE TABLE Nationalites(
    PRIMARY KEY(Id_Nationality)
 );
 
-DROP TABLE IF EXISTS City;
 CREATE TABLE City(
    Id_city INT NOT NULL AUTO_INCREMENT,
    city_name VARCHAR(50),
@@ -53,23 +52,37 @@ CREATE TABLE Gender(
    PRIMARY KEY(Id_gender)
 );
 
+DROP TABLE IF EXISTS Address;
+CREATE TABLE Address(
+   Id_address INT NOT NULL AUTO_INCREMENT,
+   street_name VARCHAR(50),
+   Id_postalcode INT NOT NULL,
+   Id_city INT NOT NULL,
+   PRIMARY KEY(Id_address),
+   FOREIGN KEY(Id_postalcode) REFERENCES Postal_code(Id_postalcode),
+   FOREIGN KEY(Id_city) REFERENCES City(Id_city)
+);
+
+
 DROP TABLE IF EXISTS People;
 CREATE TABLE People(
    Id_people INT NOT NULL AUTO_INCREMENT,
    person_firstname VARCHAR(50),
    person_lastname VARCHAR(50),
    birthday DATE,
+   Id_address INT,
    Id_Nationality INT NOT NULL,
    Id_gender INT NOT NULL,
    PRIMARY KEY(Id_people),
+   FOREIGN KEY(Id_address) REFERENCES Address(Id_address),
    FOREIGN KEY(Id_Nationality) REFERENCES Nationalites(Id_Nationality),
    FOREIGN KEY(Id_gender) REFERENCES Gender(Id_gender)
 );
 
+
 DROP TABLE IF EXISTS Author;
 CREATE TABLE Author(
-   Id_author INT NOT NULL AUTO_INCREMENT,
-   Name VARCHAR(50),
+   Id_Author INT NOT NULL AUTO_INCREMENT,
    BooksWritten INT,
    Id_people INT NOT NULL,
    PRIMARY KEY(Id_Author),
@@ -86,33 +99,6 @@ CREATE TABLE Reader(
    FOREIGN KEY(Id_people) REFERENCES People(Id_people)
 );
 
-
-DROP TABLE IF EXISTS Address;
-CREATE TABLE Address(
-   Id_address INT NOT NULL AUTO_INCREMENT,
-   street_name VARCHAR(50),
-   Id_postalcode INT NOT NULL,
-   Id_city INT NOT NULL,
-   PRIMARY KEY(Id_address),
-   FOREIGN KEY(Id_postalcode) REFERENCES Postal_code(Id_postalcode),
-   FOREIGN KEY(Id_city) REFERENCES City(Id_city)
-);
-
-
-DROP TABLE IF EXISTS Book_Details;
-CREATE TABLE Book_Details(
-   Id_Book INT NOT NULL AUTO_INCREMENT,
-   Title VARCHAR(100),
-   ISBN INT UNIQUE,
-   DatePublished DATE,
-   Id_Binding INT NOT NULL,
-   Id_Author INT NOT NULL,
-   PRIMARY KEY(Id_Book),
-   FOREIGN KEY(Id_Binding) REFERENCES Binding_Details(Id_Binding),
-   FOREIGN KEY(Id_Author) REFERENCES Author(Id_Author)
-);
-
-
 DROP TABLE IF EXISTS Shop;
 CREATE TABLE Shop(
    Id_shop INT NOT NULL AUTO_INCREMENT,
@@ -120,6 +106,20 @@ CREATE TABLE Shop(
    Id_address INT NOT NULL,
    PRIMARY KEY(Id_shop),
    FOREIGN KEY(Id_address) REFERENCES Address(Id_address)
+);
+
+DROP TABLE IF EXISTS Book_Details;
+CREATE TABLE Book_Details(
+   Id_Book INT NOT NULL AUTO_INCREMENT,
+   Title VARCHAR(100),
+   ISBN INT,
+   DatePublished DATE,
+   Id_Binding INT NOT NULL,
+   Id_Author INT NOT NULL,
+   PRIMARY KEY(Id_Book),
+   UNIQUE(ISBN),
+   FOREIGN KEY(Id_Binding) REFERENCES Binding_Details(Id_Binding),
+   FOREIGN KEY(Id_Author) REFERENCES Author(Id_Author)
 );
 
 DROP TABLE IF EXISTS isInCategory;
@@ -149,22 +149,13 @@ CREATE TABLE owns(
    FOREIGN KEY(Id_Reader) REFERENCES Reader(Id_Reader)
 );
 
-DROP TABLE IF EXISTS hasPostalCode;
+DROP TABLE IF EXISTS hasPostalcode;
 CREATE TABLE hasPostalCode(
    Id_city INT,
    Id_postalcode INT,
    PRIMARY KEY(Id_city, Id_postalcode),
    FOREIGN KEY(Id_city) REFERENCES City(Id_city),
    FOREIGN KEY(Id_postalcode) REFERENCES Postal_code(Id_postalcode)
-);
-
-DROP TABLE IF EXISTS livesAt;
-CREATE TABLE livesAt(
-   Id_address INT,
-   Id_people INT,
-   PRIMARY KEY(Id_address, Id_people),
-   FOREIGN KEY(Id_address) REFERENCES Address(Id_address),
-   FOREIGN KEY(Id_people) REFERENCES People(Id_people)
 );
 
 DROP TABLE IF EXISTS hasFavoriteGenre;
@@ -205,4 +196,13 @@ CREATE TABLE boughtBy(
    PRIMARY KEY(Id_Book, Id_shop),
    FOREIGN KEY(Id_Book) REFERENCES Book_Details(Id_Book),
    FOREIGN KEY(Id_shop) REFERENCES Shop(Id_shop)
+);
+
+DROP TABLE IF EXISTS hasFavoriteBook;
+CREATE TABLE hasFavoriteBook(
+   Id_Book INT,
+   Id_Reader INT,
+   PRIMARY KEY(Id_Book, Id_Reader),
+   FOREIGN KEY(Id_Book) REFERENCES Book_Details(Id_Book),
+   FOREIGN KEY(Id_Reader) REFERENCES Reader(Id_Reader)
 );

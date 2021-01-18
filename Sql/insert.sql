@@ -44,11 +44,11 @@ INSERT INTO Gender VALUES (NULL,"Female");
 INSERT INTO Gender VALUES (NULL,"Male");
 INSERT INTO Gender VALUES (NULL,"Not specified");
 
-INSERT INTO People VALUES (NULL,"Joanne", "Rowling", NULL, 1, 1);
+INSERT INTO People VALUES (NULL,"Joanne", "Rowling",1965-07-31, NULL, 1, 1);
 INSERT INTO Author (BooksWritten, Id_people) VALUES (36, 1);
 
-INSERT INTO Address VALUES (NULL,"Blackmore Road", 1, 2);
-INSERT INTO People VALUES (NULL,"Hannah", "FORD", 1997-06-18, 1, 1);
+INSERT INTO Address VALUES (NULL,"Blackmore Road",1, 2);
+INSERT INTO People VALUES (NULL,"Hannah", "FORD", 1997-06-18, 1, 1, 1);
 INSERT INTO Reader VALUES (Null,1);
 
 INSERT INTO Address VALUES (NULL,"1 Rue Jean Jaurès", 1, 2);
@@ -66,7 +66,6 @@ INSERT INTO isWrittenIn VALUES (1,1);
 INSERT INTO isWrittenIn VALUES (2,1);
 INSERT INTO isWrittenIn VALUES (3,1);
 
-
 INSERT INTO Owns VALUES (1, 1);
 INSERT INTO Owns VALUES (2, 1);
 
@@ -76,4 +75,3 @@ INSERT INTO hasPostalCode VALUES (3,2);
 INSERT INTO hasFavoriteGenre VALUES (7, 1);
 
 INSERT INTO Wants VALUES (3, 1);
-
